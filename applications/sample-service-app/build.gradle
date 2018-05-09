@@ -58,6 +58,7 @@ dependencies {
     testCompile('io.projectreactor:reactor-test')
 
     compile("org.springframework.cloud:spring-cloud-starter-sleuth")
+    compile("org.springframework.cloud:spring-cloud-starter-zipkin")
     compile("org.springframework.amqp:spring-rabbit")
 }
 

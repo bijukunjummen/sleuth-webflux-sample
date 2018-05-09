@@ -59,6 +59,7 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 
     compile("org.springframework.cloud:spring-cloud-starter-sleuth")
+    compile("org.springframework.cloud:spring-cloud-starter-zipkin")
     compile("org.springframework.amqp:spring-rabbit")
 
     runtime("io.micrometer:micrometer-registry-prometheus")
