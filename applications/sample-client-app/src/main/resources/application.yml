@@ -1,0 +1,31 @@
+logging:
+  level:
+    root: info
+    
+    
+loadtarget:
+  host: http://localhost:8080
+  
+server:
+  port: 8082
+  
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"   
+  metrics:
+    distribution:
+      percentiles-histogram[http.server.requests]: true 
+      sla:
+        http:
+          server:
+            requests: 1ms, 5ms
+            
+spring:
+  sleuth:
+    sampler:
+      probability: 1.0

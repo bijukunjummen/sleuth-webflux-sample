@@ -1,0 +1,61 @@
+# A sample demonstrating Spring Cloud Sleuth 2 with Zipkin
+
+This is a sample set of apps that demonstrates how tracing information carries over from a client app to a service app and then gets aggregated into Zipkin UI
+
+= Zipkin
+
+== Start RabbitMQ
+[source, bash]
+----
+rabbitmq-server
+----
+
+== Start Zipkin integrated with RabbitMQ:
+
+[source, bash]
+----
+curl -sSL https://zipkin.io/quickstart.sh | bash -s
+----
+
+== Once Zipkin jar is downloaded, run it this way:
+
+[source, bash]
+----
+RABBIT_ADDRESSES=localhost java -jar zipkin.jar
+----
+
+= Client App
+[source, bash]
+----
+./gradlew -p applications/sample-client-app clean bootRun
+----
+
+= Sample Service App
+[source, bash]
+----
+./gradlew -p applications/sample-service-app clean bootRun
+----
+
+= Testing
+Assuming that https://httpie.org/[httpie] is installed
+
+[source, bash]
+----
+http POST 'http://localhost:8082/passthrough/messages' id="1" payload="one"   delay="1000"
+----
+
+OR with CURL
+
+[source, bash]
+----
+curl -X "POST" "http://localhost:8082/passthrough/messages" \
+     -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d $'{
+  "id": "1",
+  "payload": "one",
+  "delay": "1000"
+}'
+----
+
+Trace information should get logged into the console and end up in Zipkin UI.
