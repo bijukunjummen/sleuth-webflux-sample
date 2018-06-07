@@ -1,2 +1,3 @@
 include 'applications:sample-client-app'
 include 'applications:sample-service-app'
+include 'applications:load-scripts'
