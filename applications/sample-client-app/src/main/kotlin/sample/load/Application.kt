@@ -30,7 +30,7 @@ class Application {
     fun commonTags(): MeterRegistryCustomizer<MeterRegistry> {
         return MeterRegistryCustomizer { registry ->
             registry.config()
-                    .commonTags("application", "boot2-load-sample")
+                    .commonTags("application", "sample-client-app")
         }
     }
 }

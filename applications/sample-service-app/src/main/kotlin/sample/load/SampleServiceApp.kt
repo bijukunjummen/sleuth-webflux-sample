@@ -7,18 +7,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 
 @SpringBootApplication
-class SampleLoadApplication {
+class SampleServiceApp {
 
     @Bean
     fun commonTags(): MeterRegistryCustomizer<MeterRegistry> {
         return MeterRegistryCustomizer { registry ->
             registry.config()
-                    .commonTags("application", "sample-load-target")
+                    .commonTags("application", "sample-service-app")
         }
     }
 
 }
 
 fun main(args: Array<String>) {
-    SpringApplication.run(SampleLoadApplication::class.java, *args)
+    SpringApplication.run(SampleServiceApp::class.java, *args)
 }
