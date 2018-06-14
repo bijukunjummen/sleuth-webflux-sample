@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient
 @SpringBootApplication
 class Application {
     
-    @Value("\${loadtarget.host}")
+    @Value("\${loadtarget.url}")
     lateinit var targetHost: String;
 
     @Bean

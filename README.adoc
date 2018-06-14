@@ -2,6 +2,24 @@
 
 This is a sample set of apps that demonstrates how tracing information carries over from a client app to a service app and then gets aggregated into Zipkin UI
 
+= Using Docker
+
+First create the images for all apps using 
+
+[source, bash]
+----
+./gradlew createDockerImage
+----
+
+and then
+
+[source, bash]
+----
+docker-compose up
+----
+
+
+
 = Zipkin
 
 == Start RabbitMQ

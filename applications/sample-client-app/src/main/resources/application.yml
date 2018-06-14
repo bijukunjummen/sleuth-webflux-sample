@@ -4,7 +4,7 @@ logging:
     
     
 loadtarget:
-  host: http://localhost:8080
+  url: ${LOAD_TARGET_URL:http://localhost:8080}
   
 server:
   port: 8082
@@ -29,3 +29,6 @@ spring:
   sleuth:
     sampler:
       probability: 1.0
+      
+      
+rabb

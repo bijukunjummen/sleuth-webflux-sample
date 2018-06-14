@@ -1,0 +1,43 @@
+version: '3'
+services:
+  rabbitmq:
+    image: "rabbitmq:3.7.5-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  zipkin:
+    image: "openzipkin/zipkin:2.9.3"
+    container_name: zipkin
+    links:
+      - rabbitmq    
+    environment:
+      RABBIT_ADDRESSES: rabbitmq
+    ports:
+      - 9411:9411
+
+  sample-service-app:
+    image: "sample-service-app:0.0.1-SNAPSHOT"
+    links:
+      - rabbitmq    
+    environment:
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+    ports:
+      - "8082:8080"
+
+  sample-client-app:
+    image: "sample-client-app:0.0.1-SNAPSHOT"
+    links:
+      - sample-service-app
+      - rabbitmq
+    environment:
+      SERVER_PORT: 8080
+      LOAD_TARGET_URL: http://sample-service-app:8080
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672      
+    ports:
+      - "8080:8080"

@@ -1,10 +1,11 @@
 buildscript {
     ext {
-        kotlinVersion = '1.2.21'
-        springBootVersion = '2.0.0.RELEASE'
+        kotlinVersion = '1.2.41'
+        springBootVersion = '2.0.2.RELEASE'
         wireMockVersion = "2.8.0"
     }
     repositories {
+        jcenter()
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
@@ -14,11 +15,12 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
+        classpath("com.bmuschko:gradle-docker-plugin:3.3.2")
     }
 }
 
 ext {
-    springCloudVersion = 'Finchley.RC1'
+    springCloudVersion = 'Finchley.RC2'
 }
 
 apply plugin: 'kotlin'
@@ -27,12 +29,17 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+//import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 group = 'org.bk.samples'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
     maven { url "https://repo.spring.io/snapshot" }
     maven { url "https://repo.spring.io/milestone" }
@@ -77,3 +84,11 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
+
+task createDockerImage(type: DockerBuildImage) {
+    inputDir = file('.')
+    dockerFile = project.file('docker/Dockerfile')
+    tags = ['sample-client-app:' + project.version]
+}
+
+createDockerImage.dependsOn build

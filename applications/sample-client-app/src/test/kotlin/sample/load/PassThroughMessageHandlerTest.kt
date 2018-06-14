@@ -16,7 +16,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters.fromObject
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(properties = arrayOf("loadtarget.host=http://localhost:7684"))
+@SpringBootTest(properties = arrayOf("loadtarget.url=http://localhost:7684"))
 @AutoConfigureWebTestClient
 class PassThroughMessageHandlerTest {
 
