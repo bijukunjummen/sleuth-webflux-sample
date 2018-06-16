@@ -10,16 +10,21 @@ services:
     image: "openzipkin/zipkin:2.9.3"
     container_name: zipkin
     links:
-      - rabbitmq    
+      - rabbitmq
+    depends_on:
+      - rabbitmq      
     environment:
       RABBIT_ADDRESSES: rabbitmq
     ports:
       - 9411:9411
+    restart: on-failure  
 
   sample-service-app:
     image: "sample-service-app:0.0.1-SNAPSHOT"
     links:
-      - rabbitmq    
+      - rabbitmq
+    depends_on:
+      - rabbitmq        
     environment:
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: docker
@@ -33,6 +38,8 @@ services:
     links:
       - sample-service-app
       - rabbitmq
+    depends_on:
+      - rabbitmq        
     environment:
       SERVER_PORT: 8080
       LOAD_TARGET_URL: http://sample-service-app:8080

@@ -12,17 +12,19 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyToMono
 import reactor.core.publisher.Mono
+import java.util.*
 
 class PassThroughHandler(private val webClient: WebClient) {
 
     private val logger: Logger = LoggerFactory.getLogger(PassThroughHandler::class.java)
-    
+
     fun handle(serverRequest: ServerRequest): Mono<ServerResponse> {
         val messageMono = serverRequest.bodyToMono<Message>()
         return messageMono.flatMap { message ->
+            val messageWithId = Message(message.id ?: UUID.randomUUID().toString(), message.payload, message.delay)
             logger.info("handling message: {}", message)
-            
-            passThrough(message)
+
+            passThrough(messageWithId)
                     .flatMap { messageAck ->
                         ServerResponse.ok().body(fromObject(messageAck))
                     }

@@ -18,37 +18,42 @@ and then
 docker-compose up
 ----
 
+The application helper UI to send sample requests via the Client-App to the service app will be available at http://localhost:8080
+
+Zipkin UI will be at http://localhost:9411
 
 
-= Zipkin
+= Without Docker
 
-== Start RabbitMQ
+== Start Zipkin
+
+=== Start RabbitMQ first
 [source, bash]
 ----
 rabbitmq-server
 ----
 
-== Start Zipkin integrated with RabbitMQ:
+=== Start Zipkin integrated with RabbitMQ:
 
 [source, bash]
 ----
 curl -sSL https://zipkin.io/quickstart.sh | bash -s
 ----
 
-== Once Zipkin jar is downloaded, run it this way:
+=== Once Zipkin jar is downloaded, run it this way:
 
 [source, bash]
 ----
 RABBIT_ADDRESSES=localhost java -jar zipkin.jar
 ----
 
-= Client App
+== Client App
 [source, bash]
 ----
 ./gradlew -p applications/sample-client-app clean bootRun
 ----
 
-= Sample Service App
+== Sample Service App
 [source, bash]
 ----
 ./gradlew -p applications/sample-service-app clean bootRun
@@ -59,14 +64,14 @@ Assuming that https://httpie.org/[httpie] is installed
 
 [source, bash]
 ----
-http POST 'http://localhost:8082/passthrough/messages' id="1" payload="one"   delay="1000"
+http POST 'http://localhost:8080/passthrough/messages' id="1" payload="one"   delay="1000"
 ----
 
 OR with CURL
 
 [source, bash]
 ----
-curl -X "POST" "http://localhost:8082/passthrough/messages" \
+curl -X "POST" "http://localhost:8080/passthrough/messages" \
      -H "Accept: application/json" \
      -H "Content-Type: application/json" \
      -d $'{
@@ -76,4 +81,4 @@ curl -X "POST" "http://localhost:8082/passthrough/messages" \
 }'
 ----
 
-Trace information should get logged into the console and end up in Zipkin UI.
+Trace information should get logged into the console and end up in Zipkin UI available at http://localhost:9411
