@@ -580,8 +580,8 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/ui/node_modules/bootstrap/dist/css/bootstrap.css */"./node_modules/bootstrap/dist/css/bootstrap.css");
-module.exports = __webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/ui/src/styles.css */"./src/styles.css");
+__webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/applications/sample-client-app/ui/node_modules/bootstrap/dist/css/bootstrap.css */"./node_modules/bootstrap/dist/css/bootstrap.css");
+module.exports = __webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/applications/sample-client-app/ui/src/styles.css */"./src/styles.css");
 
 
 /***/ })

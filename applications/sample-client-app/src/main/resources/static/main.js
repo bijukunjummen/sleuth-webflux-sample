@@ -384,7 +384,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/ui/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/applications/sample-client-app/ui/src/main.ts */"./src/main.ts");
 
 
 /***/ })

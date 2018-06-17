@@ -5473,7 +5473,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/ui/src/polyfills.ts */"./src/polyfills.ts");
+module.exports = __webpack_require__(/*! /Users/bkunjummen/learn/spring-boot-webflux/sleuth-webflux-sample/applications/sample-client-app/ui/src/polyfills.ts */"./src/polyfills.ts");
 
 
 /***/ })
