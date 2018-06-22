@@ -37,5 +37,5 @@ class BootLoadSimulation extends Simulation {
   val scn = scenario("Passthrough Page")
     .exec(passThroughPage)
 
-  setUp(scn.inject(rampUsers(sim_users).over(5 minutes)).protocols(httpConf))
+  setUp(scn.inject(rampUsers(sim_users).over(2 minutes)).protocols(httpConf))
 }
