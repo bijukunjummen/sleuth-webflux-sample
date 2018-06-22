@@ -17,7 +17,28 @@ services:
       RABBIT_ADDRESSES: rabbitmq
     ports:
       - 9411:9411
-    restart: on-failure  
+    restart: on-failure
+    
+  prometheus:
+    image: prom/prometheus:v2.2.0
+    volumes:
+      - ./monitor/prometheus.yml:/etc/prometheus/prometheus.yml
+    links:
+      - sample-service-app
+      - sample-client-app
+    ports:
+      - "9090:9090"
+      
+  grafana:
+    image: grafana/grafana:5.0.1
+    volumes:
+      - "./monitor/grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasource.yml"
+      - "./monitor/grafana-dashboard.json:/etc/grafana/dashboards/default.json" 
+      - "./monitor/grafana-dashboard.yml:/etc/grafana/provisioning/dashboards/grafana-dashboard.yml"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus      
 
   sample-service-app:
     image: "sample-service-app:0.0.1-SNAPSHOT"

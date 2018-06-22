@@ -6,6 +6,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 
 import scala.concurrent.duration._
+import scala.util.Random
 
 class BootLoadSimulation extends Simulation {
 
@@ -13,10 +14,12 @@ class BootLoadSimulation extends Simulation {
   val sim_users = System.getProperty("SIM_USERS").toInt
 
   val httpConf = http.baseURL(baseUrl)
+  
+  private val rnd: Random = new Random()
 
   val headers = Map("Accept" -> """application/json""")
 
-  val passThroughPage = repeat(30) {
+  val passThroughPage = repeat(10) {
     exec(http("passthrough-messages")
       .post("/passthrough/messages")
         .header("Content-Type", "application/json" )
@@ -25,7 +28,7 @@ class BootLoadSimulation extends Simulation {
            | {
            |   "id": "${UUID.randomUUID().toString}",
            |   "payload": "test payload",
-           |   "delay": 300
+           |   "delay": ${rnd.nextInt(1001)} 
            | }
         """.stripMargin)))
       .pause(1 second, 2 seconds)
@@ -34,5 +37,5 @@ class BootLoadSimulation extends Simulation {
   val scn = scenario("Passthrough Page")
     .exec(passThroughPage)
 
-  setUp(scn.inject(rampUsers(sim_users).over(30 seconds)).protocols(httpConf))
+  setUp(scn.inject(rampUsers(sim_users).over(5 minutes)).protocols(httpConf))
 }

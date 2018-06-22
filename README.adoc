@@ -18,9 +18,11 @@ and then
 docker-compose up
 ----
 
-The application helper UI to send sample requests via the Client-App to the service app will be available at http://localhost:8080
+The application helper UI to send sample requests via the Client-App to the service app will be available at http://<dockerip>:8080
 
-Zipkin UI will be at http://localhost:9411
+Zipkin UI will be at http://<dockerip>:9411
+Graphana at http://<dockerip>:3000
+and Prometheus at http://<dockerip>:3000
 
 
 = Without Docker
@@ -82,3 +84,12 @@ curl -X "POST" "http://localhost:8080/passthrough/messages" \
 ----
 
 Trace information should get logged into the console and end up in Zipkin UI available at http://localhost:9411
+
+
+= Generating load
+
+A gatling based load can be sent to the app using:  
+[source, bash]
+----
+./gradlew -p applications/load-scripts  -DTARGET_URL=http://localhost:8080 -DSIM_USERS=50 gatlingRun
+----

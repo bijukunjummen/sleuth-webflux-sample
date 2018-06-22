@@ -1,0 +1,8 @@
+global:
+  scrape_interval:     10s # By default, scrape targets every 15 seconds.
+scrape_configs:
+  - job_name: 'sleuth-apps'
+    scrape_interval: 5s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ["sample-client-app:8080","sample-service-app:8080"]
