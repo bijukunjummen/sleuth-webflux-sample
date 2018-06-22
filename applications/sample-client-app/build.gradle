@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlinVersion = '1.2.41'
-        springBootVersion = '2.0.2.RELEASE'
+        springBootVersion = '2.0.3.RELEASE'
         wireMockVersion = "2.8.0"
     }
     repositories {
@@ -14,13 +14,12 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
         classpath("com.bmuschko:gradle-docker-plugin:3.3.2")
     }
 }
 
 ext {
-    springCloudVersion = 'Finchley.RC2'
+    springCloudVersion = 'Finchley.RELEASE'
 }
 
 apply plugin: 'kotlin'
@@ -28,7 +27,6 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'com.bmuschko.docker-remote-api'
 
 //import com.bmuschko.gradle.docker.tasks.image.Dockerfile
@@ -89,6 +87,10 @@ task createDockerImage(type: DockerBuildImage) {
     inputDir = file('.')
     dockerFile = project.file('docker/Dockerfile')
     tags = ['sample-client-app:' + project.version]
+}
+
+test {
+    useJUnitPlatform()
 }
 
 createDockerImage.dependsOn build
