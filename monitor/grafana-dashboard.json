@@ -112,7 +112,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_count{application=\"$application\", uri=~\"/.*messages\"}[10s])",
+          "expr": "rate(http_server_requests_seconds_count{application=\"$application\", uri=~\"/.*messages\"}[1m])",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -195,7 +195,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_sum{application=\"$application\", uri=~\".*messages\"}[10s])/rate(http_server_requests_seconds_count{application=\"$application\", uri=~\".*messages\"}[10s])",
+          "expr": "rate(http_server_requests_seconds_sum{application=\"$application\", uri=~\".*messages\"}[1m])/rate(http_server_requests_seconds_count{application=\"$application\", uri=~\".*messages\"}[1m])",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -203,7 +203,7 @@
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.9, rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\"}[10s])) * 1000",
+          "expr": "histogram_quantile(0.9, rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\"}[1m])) * 1000",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -211,14 +211,14 @@
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\"}[10s])) * 1000",
+          "expr": "histogram_quantile(0.95, rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\"}[1m])) * 1000",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "95th percentile",
           "refId": "C"
         },
         {
-          "expr": "histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\"}[10s])) * 1000",
+          "expr": "histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\"}[1m])) * 1000",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "99th percentile",
@@ -299,14 +299,14 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\", le=\"0.005\"}[10s])",
+          "expr": "rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\", le=\"0.005\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "5ms requests",
           "refId": "A"
         },
         {
-          "expr": "rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\", le=\"0.001\"}[10s])",
+          "expr": "rate(http_server_requests_seconds_bucket{application=\"$application\", uri=~\".*messages\", le=\"0.001\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "1ms requests",
