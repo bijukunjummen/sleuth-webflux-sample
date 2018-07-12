@@ -4,7 +4,6 @@ metadata:
   name: sample-service-app-service
   labels:
     app: sample-service-app
-    visualize: "true"
 spec:
   type: LoadBalancer
   ports:

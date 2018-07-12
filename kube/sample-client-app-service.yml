@@ -4,9 +4,9 @@ metadata:
   name: sample-client-app-service
   labels:
     app: sample-client-app
-    visualize: "true"
 spec:
   type: LoadBalancer
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8080

@@ -19,23 +19,19 @@ class BootLoadSimulation extends Simulation {
 
   val headers = Map("Accept" -> """application/json""")
 
-  val passThroughPage = repeat(10) {
+  val passThroughPage = repeat(500) {
     exec(http("passthrough-messages")
       .post("/passthrough/messages")
         .header("Content-Type", "application/json" )
-      .body(StringBody(
-        s"""
-           | {
-           |   "id": "${UUID.randomUUID().toString}",
-           |   "payload": "test payload",
-           |   "delay": ${rnd.nextInt(1001)} 
-           | }
-        """.stripMargin)))
-      .pause(1 second, 2 seconds)
+      .body(StringBody("""{"id": "${randomId}", "payload": "test payload", "delay": ${randomDelay}}""")))
+      .pause(100 millis, 200 millis)
   }
 
+  val randomFeed = Iterator.continually(Map("randomId" -> UUID.randomUUID(), "randomDelay" -> rnd.nextInt(1001)))
+
   val scn = scenario("Passthrough Page")
+    .feed(randomFeed)
     .exec(passThroughPage)
 
-  setUp(scn.inject(rampUsers(sim_users).over(2 minutes)).protocols(httpConf))
+  setUp(scn.inject(atOnceUsers(sim_users)).protocols(httpConf))
 }

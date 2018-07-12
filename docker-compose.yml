@@ -33,7 +33,7 @@ services:
     image: grafana/grafana:5.0.1
     volumes:
       - "./monitor/grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasource.yml"
-      - "./monitor/grafana-dashboard.json:/etc/grafana/dashboards/default.json" 
+      - "./monitor/grafana-dashboard.json:/etc/grafana/dashboards/default.json"
       - "./monitor/grafana-dashboard.yml:/etc/grafana/provisioning/dashboards/grafana-dashboard.yml"
     ports:
       - "3000:3000"

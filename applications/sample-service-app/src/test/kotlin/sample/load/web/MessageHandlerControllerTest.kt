@@ -33,5 +33,5 @@ class MessageHandlerControllerTest {
                     | }
                 """.trimMargin())
     }
-    
+
 }

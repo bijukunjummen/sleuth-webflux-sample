@@ -20,10 +20,7 @@ management:
   metrics:
     distribution:
       percentiles-histogram[http.server.requests]: true 
-      sla:
-        http:
-          server:
-            requests: 1ms, 5ms
+      sla[http.server.requests]: 1s, 500ms
             
 spring:
   sleuth:

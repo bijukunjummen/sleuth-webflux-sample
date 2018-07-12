@@ -11,12 +11,12 @@ spec:
   selector:
     matchLabels:
       app: sample-service-app
+      version: v1
   template:
     metadata:
       labels:
         app: sample-service-app
         version: v1
-        visualize: "true"
     spec:
       containers:
       - name: sample-service-app
