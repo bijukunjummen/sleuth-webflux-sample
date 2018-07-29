@@ -17,6 +17,11 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.google.cloud.tools.jib' version '0.9.6'
+}
+
+
 ext {
     springCloudVersion = 'Finchley.RELEASE'
 }
@@ -86,10 +91,15 @@ dependencyManagement {
 //    certPath = new File(System.properties['user.home'], '/.minikube/certs')
 //}
 
-task createDockerImage(type: DockerBuildImage) {
-    inputDir = file('.')
-    dockerFile = project.file('docker/Dockerfile')
-    tags = ['sample-service-app:' + project.version]
-}
+//task createDockerImage(type: DockerBuildImage) {
+//    inputDir = file('.')
+//    dockerFile = project.file('docker/Dockerfile')
+//    tags = ['sample-service-app:' + project.version]
+//}
 
-createDockerImage.dependsOn build
+jib {
+    to {
+        image = "sample-service-app:${project.version}"
+    }
+}
+//createDockerImage.dependsOn build

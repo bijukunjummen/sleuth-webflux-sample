@@ -18,6 +18,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.google.cloud.tools.jib' version '0.9.6'
+}
+
 ext {
     springCloudVersion = 'Finchley.RELEASE'
 }
@@ -89,15 +93,21 @@ dependencyManagement {
 //    url = 'https://192.168.99.100:2376'
 //    certPath = new File(System.properties['user.home'], '/.minikube/certs')
 //}
+//
+//task createDockerImage(type: DockerBuildImage) {
+//    inputDir = file('.')
+//    dockerFile = project.file('docker/Dockerfile')
+//    tags = ['sample-client-app:' + project.version]
+//}
 
-task createDockerImage(type: DockerBuildImage) {
-    inputDir = file('.')
-    dockerFile = project.file('docker/Dockerfile')
-    tags = ['sample-client-app:' + project.version]
+jib {
+    to {
+        image = "sample-client-app:${project.version}"
+    }
 }
 
 test {
     useJUnitPlatform()
 }
 
-createDockerImage.dependsOn build
+//createDockerImage.dependsOn build
