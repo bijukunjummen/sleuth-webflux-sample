@@ -41,7 +41,7 @@ services:
       - prometheus      
 
   sample-service-app:
-    image: "sample-service-app:0.0.1-SNAPSHOT"
+    image: "sample-backend-app:0.0.1-SNAPSHOT"
     links:
       - rabbitmq
     depends_on:
