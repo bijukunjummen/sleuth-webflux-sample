@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlinVersion = '1.2.41'
-        springBootVersion = '2.0.3.RELEASE'
+        springBootVersion = '2.0.4.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -13,7 +13,6 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-        classpath("com.bmuschko:gradle-docker-plugin:3.3.2")
     }
 }
 
@@ -30,9 +29,7 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.bmuschko.docker-remote-api'
 
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 group = 'org.bk.samples'
 version = '0.0.1-SNAPSHOT'
@@ -99,7 +96,7 @@ dependencyManagement {
 
 jib {
     to {
-        image = "sample-service-app:${project.version}"
+        image = "sample-backend-app:${project.version}"
     }
 }
 //createDockerImage.dependsOn build

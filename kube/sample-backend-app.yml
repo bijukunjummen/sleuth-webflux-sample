@@ -1,26 +1,26 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sample-service-app-v1
+  name: sample-backend-app-v1
   labels:
-    app: sample-service-app-v1
+    app: sample-backend-app-v1
     visualize: "true"
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sample-service-app
+      app: sample-backend-app
       version: v1
   template:
     metadata:
       labels:
-        app: sample-service-app
+        app: sample-backend-app
         version: v1
     spec:
       containers:
-      - name: sample-service-app
-        image: sample-service-app:0.0.1-SNAPSHOT
+      - name: sample-backend-app
+        image: sample-backend-app:0.0.1-SNAPSHOT
         env:
         - name: VERSION
           value: "1.0"

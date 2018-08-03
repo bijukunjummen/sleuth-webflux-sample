@@ -1,9 +1,9 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: sample-service-app-service
+  name: sample-backend-app-service
   labels:
-    app: sample-service-app
+    app: sample-backend-app
 spec:
   type: LoadBalancer
   ports:
@@ -11,4 +11,4 @@ spec:
       port: 8080
       targetPort: 8080
   selector:
-    app: sample-service-app
+    app: sample-backend-app
