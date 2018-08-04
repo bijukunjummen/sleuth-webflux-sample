@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyToMono
 import reactor.core.publisher.Mono
 import java.time.Duration
+import java.util.UUID
 
 @Service
 class MessageHandler {
@@ -24,7 +25,7 @@ class MessageHandler {
             logger.info("Handling message: {}", m)
             counter.increment()
             Mono
-                    .fromCallable { MessageAck(id = m.id, received = m.payload, ack = "ack") }
+                    .fromCallable { MessageAck(id = m.id?:UUID.randomUUID().toString(), received = m.payload, ack = "ack") }
                     .delayElement(Duration.ofMillis(m.delay))
                     .flatMap { messageAck ->
                         ServerResponse
