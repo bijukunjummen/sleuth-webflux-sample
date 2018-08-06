@@ -13,8 +13,16 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "buildInline": "react-scripts build && mv build/* ../src/main/resources/static",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
+    "buildForBoot": "react-scripts build && mv -f build/* ../src/main/resources/static",
+    "test": "react-scripts test --env=jsdom"
+  },
+  "devDependencies": {
+    "axios-mock-adapter": "^1.15.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest-enzyme": "^6.0.2",
+    "prettier": "1.14.0",
+    "sinon": "^6.1.4"
+  },
+  "proxy": "http://localhost:8080"
 }
