@@ -14,6 +14,6 @@ spec:
             - name: VERSION
               value: "0.0.1-SNAPSHOT"
             - name: LOAD_TARGET_URL
-              value: http://sample-service-app-service:8080
+              value: http://sample-backend-app
             - name: SERVER_PORT
-              value: "8080"              
+              value: "8080"
