@@ -96,7 +96,7 @@ dependencyManagement {
 
 jib {
     to {
-        image = "sample-backend-app:${project.version}"
+        image = "bijukunjummen/sample-backend-app:${project.version}"
     }
 }
 //createDockerImage.dependsOn build

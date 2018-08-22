@@ -98,7 +98,7 @@ dependencyManagement {
 
 jib {
     to {
-        image = "sample-client-app:${project.version}"
+        image = "bijukunjummen/sample-client-app:${project.version}"
     }
 }
 

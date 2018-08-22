@@ -1,0 +1,17 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: sample-backend-app
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      revisionTemplate:
+        spec:
+          container:
+            image: bijukunjummen/sample-backend-app:0.0.1-SNAPSHOT
+            env:
+            - name: VERSION
+              value: "0.0.1-SNAPSHOT"
+            - name: SERVER_PORT
+              value: "8080"
