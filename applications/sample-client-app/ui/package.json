@@ -13,7 +13,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "buildForBoot": "react-scripts build && mv -f build/* ../src/main/resources/static",
+    "buildForBoot": "react-scripts build && cp -R build/* ../src/main/resources/static",
     "test": "react-scripts test --env=jsdom"
   },
   "devDependencies": {

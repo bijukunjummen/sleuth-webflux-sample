@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import {MainForm} from './MainView';
-import sinon from 'sinon'
 
 describe("Main View of Client UI", () => {
 
