@@ -99,4 +99,9 @@ jib {
         image = "bijukunjummen/sample-backend-app:${project.version}"
     }
 }
+
+test {
+    useJUnitPlatform()
+}
+
 //createDockerImage.dependsOn build
