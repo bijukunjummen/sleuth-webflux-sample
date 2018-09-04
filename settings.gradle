@@ -1,3 +1,4 @@
 include 'applications:sample-client-app'
 include 'applications:sample-backend-app'
+include 'applications:host-rewrite-gateway'
 include 'applications:load-scripts'
