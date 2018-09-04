@@ -21,7 +21,7 @@ class PassThroughHandler(private val webClient: WebClient) {
     fun handle(serverRequest: ServerRequest): Mono<ServerResponse> {
         val messageMono = serverRequest.bodyToMono<Message>()
         return messageMono.flatMap { message ->
-            val messageWithId = Message(message.id ?: UUID.randomUUID().toString(), message.payload, message.delay)
+            val messageWithId = Message(message.id, message.payload, message.delay)
             logger.info("handling message: {}", message)
 
             passThrough(messageWithId)

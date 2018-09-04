@@ -11,13 +11,11 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyToMono
 import reactor.core.publisher.Mono
 import java.time.Duration
-import java.util.UUID
 
 @Service
 class MessageHandler {
-
     private val logger: Logger = LoggerFactory.getLogger(MessageHandler::class.java)
-    
+
     private val counter = Metrics.counter("handler.calls", "uri", "/messages")
 
     fun handleMessage(req: ServerRequest): Mono<ServerResponse> {
@@ -25,14 +23,18 @@ class MessageHandler {
             logger.info("Handling message: {}", m)
             counter.increment()
             Mono
-                    .fromCallable { MessageAck(id = m.id?:UUID.randomUUID().toString(), received = m.payload, ack = "ack") }
+                    .fromCallable { MessageAck(id = m.id, received = m.payload, ack = "ack") }
                     .delayElement(Duration.ofMillis(m.delay))
                     .flatMap { messageAck ->
-                        ServerResponse
-                                .status(HttpStatus.OK)
-                                .body(fromObject(messageAck))
+                        if (m.throwException) {
+                            Mono.error(RuntimeException("Something went wrong!!"))
+                        } else {
+                            ServerResponse
+                                    .status(HttpStatus.OK)
+                                    .body(fromObject(messageAck))
+                        }
                     }
         }
     }
-
 }
+        

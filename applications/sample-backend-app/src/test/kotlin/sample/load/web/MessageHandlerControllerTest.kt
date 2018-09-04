@@ -14,10 +14,10 @@ import sample.load.config.RoutesConfig
 @ExtendWith(SpringExtension::class)
 @WebFluxTest(controllers = arrayOf(RoutesConfig::class, MessageHandler::class))
 class MessageHandlerControllerTest {
-    
+
     @Autowired
     private lateinit var webTestClient: WebTestClient
-    
+
     @Test
     fun testCallToMessageEndpoint() {
         webTestClient.post().uri("/messages")
@@ -34,4 +34,12 @@ class MessageHandlerControllerTest {
                 """.trimMargin())
     }
 
+    @Test
+    fun testCallToMessageEndpointWithException() {
+        webTestClient.post().uri("/messages")
+                .body(fromObject(Message("1", "one", 0, true)))
+                .exchange()
+                .expectStatus().is5xxServerError
+
+    }
 }

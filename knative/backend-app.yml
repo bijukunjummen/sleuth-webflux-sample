@@ -9,7 +9,7 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: bijukunjummen/sample-backend-app:0.0.1-SNAPSHOT
+            image: bijukunjummen/sample-backend-app:0.0.2-SNAPSHOT
             env:
             - name: VERSION
               value: "0.0.1-SNAPSHOT"
