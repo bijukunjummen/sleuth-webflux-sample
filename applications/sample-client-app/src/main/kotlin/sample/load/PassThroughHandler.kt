@@ -21,10 +21,9 @@ class PassThroughHandler(private val webClient: WebClient) {
     fun handle(serverRequest: ServerRequest): Mono<ServerResponse> {
         val messageMono = serverRequest.bodyToMono<Message>()
         return messageMono.flatMap { message ->
-            val messageWithId = Message(message.id, message.payload, message.delay)
             logger.info("handling message: {}", message)
 
-            passThrough(messageWithId)
+            passThrough(message)
                     .flatMap { messageAck ->
                         ServerResponse.ok().body(fromObject(messageAck))
                     }
