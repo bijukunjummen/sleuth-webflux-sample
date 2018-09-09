@@ -1,9 +1,16 @@
 package sample.load
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.*
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.equalTo
+import com.github.tomakehurst.wiremock.client.WireMock.matching
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
+import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
+import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -11,9 +18,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters.fromObject
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.bodyToMono
+import reactor.core.publisher.Mono
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(properties = arrayOf("loadtarget.url=http://localhost:7684"))
@@ -24,21 +35,21 @@ class PassThroughMessageHandlerTest {
     private lateinit var webTestClient: WebTestClient
 
     private var wiremockServer = WireMockServer(WireMockConfiguration.wireMockConfig().port(7684));
-    
+
     @BeforeEach
     fun before() {
         wiremockServer.start()
     }
-    
+
     @AfterEach
     fun after() {
         wiremockServer.stop()
     }
-    
+
     @Test
     @DisplayName("test a passthrough call")
     fun testPassThroughCall() {
-        
+
         wiremockServer.stubFor(post(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .willReturn(aResponse()
@@ -51,7 +62,7 @@ class PassThroughMessageHandlerTest {
                          |   "ack": "ack"
                          | }
                         """.trimMargin())))
-        
+
         webTestClient.post()
                 .uri("/passthrough/messages")
                 .body(fromObject(Message("1", "one", 0)))
@@ -65,10 +76,41 @@ class PassThroughMessageHandlerTest {
                     |   "ack": "ack"
                     | }
                 """.trimMargin())
-        
+
         wiremockServer.verify(postRequestedFor(urlMatching("/messages"))
                 .withRequestBody(matching(".*one.*"))
                 .withHeader("Content-Type", matching("application/json")))
     }
-    
+
+    @Test
+    @DisplayName("test a passthrough call")
+    fun testWithException() {
+
+        wiremockServer.stubFor(post(urlEqualTo("/messages"))
+                .withHeader("Accept", equalTo("application/json"))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("Something is wrong!!")))
+
+
+        webTestClient.post()
+                .uri("/passthrough/messages")
+                .body(fromObject(Message("1", "one", 0)))
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBody()
+                .json(""" 
+                    | {
+                    |   "id": "1",
+                    |   "received": "one",
+                    |   "ack": "",
+                    |   "error_message": "500: Something is wrong!!"
+                    | }
+                """.trimMargin())
+
+        wiremockServer.verify(postRequestedFor(urlMatching("/messages"))
+                .withRequestBody(matching(".*one.*"))
+                .withHeader("Content-Type", matching("application/json")))
+    }
 }

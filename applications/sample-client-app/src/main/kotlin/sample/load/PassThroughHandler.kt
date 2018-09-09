@@ -38,7 +38,12 @@ class PassThroughHandler(private val webClient: WebClient) {
                 .body(fromObject(message))
                 .exchange()
                 .flatMap { response: ClientResponse ->
-                    response.bodyToMono<MessageAck>()
+                    if (!response.statusCode().is2xxSuccessful) {
+                        response.bodyToMono<String>().map {body ->  MessageAck(message.id, message.payload, "", 
+                                 "" + response.statusCode().value() + ": " + body) }
+                    } else {
+                        response.bodyToMono<MessageAck>()
+                    }
                 }
     }
 }
