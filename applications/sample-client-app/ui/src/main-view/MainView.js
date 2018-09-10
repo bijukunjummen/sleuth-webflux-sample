@@ -202,7 +202,7 @@ export class MainForm extends React.Component {
                   </div>
                 </div>
               </div>
-             
+
               <div className="form-group row">
                 <div className="col-sm-10">
                   {!this.state.loading &&

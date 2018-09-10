@@ -121,18 +121,18 @@ class PassThroughMessageHandlerTest {
                 .withHeader("Content-Type", matching("application/json")))
     }
 
-    @Test
-    @DisplayName("test with no backend and connection refused errors")
-    fun testWithNoBackend() {
-        wiremockServer.stop()
-        webTestClient.post()
-                .uri("/passthrough/messages")
-                .body(fromObject(Message("1", "one", 0)))
-                .exchange()
-                .expectStatus().is5xxServerError
-                
-
-    }
+//    @Test
+//    @DisplayName("test with no backend and connection refused errors")
+//    fun testWithNoBackend() {
+//        wiremockServer.stop()
+//        webTestClient.post()
+//                .uri("/passthrough/messages")
+//                .body(fromObject(Message("1", "one", 0)))
+//                .exchange()
+//                .expectStatus().is5xxServerError
+//                
+//
+//    }
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
