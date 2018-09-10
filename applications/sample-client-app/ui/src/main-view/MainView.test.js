@@ -9,6 +9,7 @@ describe("Main View of Client UI", () => {
     expect(wrapper.contains(<h3>Send a request</h3>)).toEqual(true);
     expect(wrapper.find("label[htmlFor='payload']").html()).toMatch(/Payload/)
     expect(wrapper.find("label[htmlFor='delay']").html()).toMatch(/Delay/)
+    expect(wrapper.find("label[htmlFor='throw_exception']").html()).toMatch(/Throw an Exception/)
   });
 
   it("handles form submissions", () => {
@@ -17,12 +18,12 @@ describe("Main View of Client UI", () => {
     const passthroughCallSpy = jest.spyOn(
       wrapper.instance(),
       'passthroughCallAndSetState'
-    ).mockImplementation((payload, delay) => {
+    ).mockImplementation((payload, delay, throw_exception) => {
     });
     expect(wrapper.find("button[name='submit']").html()).toMatch(/Submit/)
 
     wrapper.find("button[name='submit']").simulate("submit");
-    expect(passthroughCallSpy).toHaveBeenCalledWith("Sample", 100);
+    expect(passthroughCallSpy).toHaveBeenCalledWith("Sample", 100, false);
     expect(wrapper.state("loading")).toBe(false)
   });
 

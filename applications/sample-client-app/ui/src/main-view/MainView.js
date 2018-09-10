@@ -49,6 +49,10 @@ export const ResponseDisplay = ({responseMessage, responseError}) => {
           <label htmlFor="acked" className="col-sm-2">Acked : </label>
           <span className="col-sm-4">{responseMessage.ack}</span>
         </div>
+        <div className="row">
+          <label htmlFor="errorMessage" className="col-sm-2">Error Message From Backend : </label>
+          <span className="col-sm-4">{responseMessage.error_message}</span>
+        </div>
       </div>
       }
 
@@ -69,6 +73,7 @@ export class MainForm extends React.Component {
     this.state = {
       payload: "dummy payload",
       delay: 100,
+      throw_exception: false,
       formErrors: {payload: '', delay: ''},
       loading: false,
       payloadValid: true,
@@ -79,6 +84,7 @@ export class MainForm extends React.Component {
     }
 
     this.handleUserInput = this.handleUserInput.bind(this);
+    this.handleChangeExceptionState = this.handleChangeExceptionState.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
@@ -90,14 +96,14 @@ export class MainForm extends React.Component {
     this.setState({responseError: ""});
     this.setState({responseMessage: null});
 
-    this.passthroughCallAndSetState(this.state.payload, this.state.delay);
+    this.passthroughCallAndSetState(this.state.payload, this.state.delay, this.state.throw_exception);
     e.preventDefault()
   }
 
-  passthroughCallAndSetState(payload, delay) {
+  passthroughCallAndSetState(payload, delay, throw_exception) {
     this.setState({loading: true});
     restCalls
-      .makePassthroughCall(payload, delay)
+      .makePassthroughCall(payload, delay, throw_exception)
       .then(resp => {
         this.setState({responseMessage: resp.data, loading: false});
       }).catch(error => {
@@ -111,6 +117,15 @@ export class MainForm extends React.Component {
     this.setState({[name]: value}, () => {
       this.validateField(name, value)
     });
+  }
+
+  handleChangeExceptionState(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    let currentState = this.state[name];
+
+    this.setState({[name]: !currentState})
   }
 
   validateField(fieldName, value) {
@@ -171,10 +186,23 @@ export class MainForm extends React.Component {
                 <label htmlFor="delay" className="col-sm-2 col-form-label">Delay (in ms)</label>
                 <div className="col-sm-10">
                   <input name="delay" type="number" className="form-control" placeholder="delay"
-                         value={this.state.delay} onChange={(event) => this.handleUserInput(event)}/>
+                         value={this.state.delay} onChange={this.handleUserInput}/>
 
                 </div>
               </div>
+              <div className="form-group row">
+                <div className="col-sm-2"></div>
+                <div className="col-sm-10">
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" name="throw_exception"
+                           checked={this.state.throw_exception} onChange={this.handleChangeExceptionState}/>
+                      <label className="form-check-label" htmlFor="throw_exception">
+                        Throw an Exception?
+                      </label>
+                  </div>
+                </div>
+              </div>
+             
               <div className="form-group row">
                 <div className="col-sm-10">
                   {!this.state.loading &&

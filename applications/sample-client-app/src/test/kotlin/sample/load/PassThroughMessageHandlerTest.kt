@@ -9,41 +9,48 @@ import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.util.TestPropertyValues
+import org.springframework.context.ApplicationContextInitializer
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters.fromObject
-import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.bodyToMono
-import reactor.core.publisher.Mono
+
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(properties = arrayOf("loadtarget.url=http://localhost:7684"))
+@SpringBootTest
+@ContextConfiguration(initializers = [PassThroughMessageHandlerTest.Initializer::class])
 @AutoConfigureWebTestClient
 class PassThroughMessageHandlerTest {
 
     @Autowired
     private lateinit var webTestClient: WebTestClient
 
-    private var wiremockServer = WireMockServer(WireMockConfiguration.wireMockConfig().port(7684));
+    companion object {
+        val wiremockServer = WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
 
-    @BeforeEach
-    fun before() {
-        wiremockServer.start()
-    }
+        @BeforeAll
+        @JvmStatic
+        fun before() {
+            wiremockServer.start()
+        }
 
-    @AfterEach
-    fun after() {
-        wiremockServer.stop()
+        @AfterAll
+        @JvmStatic
+        fun after() {
+            wiremockServer.stop()
+        }
+
     }
 
     @Test
@@ -83,14 +90,14 @@ class PassThroughMessageHandlerTest {
     }
 
     @Test
-    @DisplayName("test a passthrough call")
+    @DisplayName("test a passthrough call with backend error")
     fun testWithException() {
 
         wiremockServer.stubFor(post(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Content-Type", "text/plain")
                         .withBody("Something is wrong!!")))
 
 
@@ -112,5 +119,26 @@ class PassThroughMessageHandlerTest {
         wiremockServer.verify(postRequestedFor(urlMatching("/messages"))
                 .withRequestBody(matching(".*one.*"))
                 .withHeader("Content-Type", matching("application/json")))
+    }
+
+    @Test
+    @DisplayName("test with no backend and connection refused errors")
+    fun testWithNoBackend() {
+        wiremockServer.stop()
+        webTestClient.post()
+                .uri("/passthrough/messages")
+                .body(fromObject(Message("1", "one", 0)))
+                .exchange()
+                .expectStatus().is5xxServerError
+                
+
+    }
+
+    internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+        override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
+            TestPropertyValues.of(
+                    "loadtarget.url=" + "http://localhost:" + wiremockServer.port()
+            ).applyTo(configurableApplicationContext.environment)
+        }
     }
 }
