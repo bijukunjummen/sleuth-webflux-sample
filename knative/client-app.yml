@@ -9,10 +9,10 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: bijukunjummen/sample-client-app:0.0.2-SNAPSHOT
+            image: bijukunjummen/sample-client-app:0.0.3-SNAPSHOT
             env:
             - name: VERSION
-              value: "0.0.1-SNAPSHOT"
+              value: "0.0.3-SNAPSHOT"
             - name: LOAD_TARGET_URL
               value: http://sample-backend-app.default.svc.cluster.local
             - name: SERVER_PORT
