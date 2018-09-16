@@ -1,30 +1,30 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sample-backend-app-v3
+  name: client-app-v3
   labels:
-    app: sample-backend-app-v3
+    app: client-app-v3
     version: v3
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sample-backend-app
+      app: client-app
       version: v3
   template:
     metadata:
       labels:
-        app: sample-backend-app
+        app: client-app
         version: v3
     spec:
       containers:
-      - name: sample-backend-app
-        image: bijukunjummen/sample-backend-app:0.0.3-SNAPSHOT
+      - name: sample-client-app
+        image: bijukunjummen/sample-client-app:0.0.3-SNAPSHOT
         env:
         - name: VERSION
           value: "0.0.3"
-        - name: SERVER_PORT
-          value: "8080"
+        - name: LOAD_TARGET_URL
+          value: http://sample-backend-app-service:8080
         ports:
         - name: http
           containerPort: 8080

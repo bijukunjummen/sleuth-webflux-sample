@@ -1,12 +1,12 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: sample-backend-app-service
+  name: backend-virtual-service
 spec:
   hosts:
-  - sample-backend-app-service
+  - backend-app-service
   http:
   - route:
     - destination:
-        host: sample-backend-app-service
+        host: backend-app-service
     timeout: 2s

@@ -1,14 +1,15 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: sample-backend-app-service
+  name: client-app-service
   labels:
-    app: sample-backend-app
+    app: client-app
 spec:
   type: LoadBalancer
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8080
       targetPort: 8080
   selector:
-    app: sample-backend-app
+    app: client-app
