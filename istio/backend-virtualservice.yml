@@ -9,4 +9,4 @@ spec:
   - route:
     - destination:
         host: backend-app-service
-    timeout: 2s
+        # timeout: 2s

@@ -5,14 +5,15 @@ metadata:
 spec:
   host: backend-app-service
   trafficPolicy:
-    connectionPool:
-      tcp:
-        maxConnections: 1
-      http:
-        http1MaxPendingRequests: 1
-        maxRequestsPerConnection: 1
+          #    connectionPool:
+          #tcp:
+          # maxConnections: 1
+          # http:
+          # http1MaxPendingRequests: 1
+          # maxRequestsPerConnection: 1
     outlierDetection:
       consecutiveErrors: 1
-      interval: 1s
+      interval: 30s
       baseEjectionTime: 3m
       maxEjectionPercent: 100
+      # enforcingConsecutive5xx: 100 
